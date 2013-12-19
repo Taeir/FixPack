@@ -1,0 +1,52 @@
+Taeir's FixPack for Tekkit - Version 0.5
+
+* NEI
+** Fix for NEI creative hack
+** All NEI features are now checked server side before being executed. This means that there is no client modification that can give you power to use any NEI feature if the server doesn't want that player to have that power.
+** Adding permissions for NEI so you can give players certain features of NEI without having to edit the config file.
+** Added more messages
+
+* ModularForcefield
+** Fix the bug where clicking on a forcefield causes errors.
+** Fix forcefields still damaging you when you are in godmode or resistant to damage in any way.
+** Added custom death message for getting killed by a zapper forcefield: "<Player> was zapped by a forcefield"
+
+*  IC2
+** Fix cropmatron + stacked weed-ex (can only be obtained through spawning) crashing servers and corrupting chunks. (Stacked weed-ex and stacked hydration cells now work properly and deplete one by one.
+** Fix tesla coils still damaging you when you are in godmode or resistant to damage in any way.
+** [Future feature]: Fix nukes being able to kill players in godmode.
+
+* WeaponsMod
+** Added special death messages for all weapons.
+** Fixed all weapons to call damageevents that can be prevented.
+
+* WirelessRedstone
+** Fix REP's still damaging you while in godmode or resistant to damage in any way.
+
+* TubeStuff
+** Honestly, I forgot and can't figure out what I changed...
+
+* ComputerCraft
+** Fix for certain server crashes when controlling redstone with computers.
+** Fix for other server crashes related to computercraft.
+
+
+NEI Permissions:
+* nei.heal - Ability to heal and feed yourself with NEI
+* nei.delete - Ability to delete items with NEI
+* nei.rain - ability to change the weather with NEI
+* nei.time - Ability to change the time with NEI
+* nei.creative - Ability to switch gamemodes with NEI
+* nei.save-state - Ability to use the save-states with NEI
+* nei.enchant - Ability to enchant items with NEI (press x in your inventory)
+* nei.magnet - Ability to enable magnet mode (items fly to you from great distance)
+* nei.item - Ability to spawn items with NEI
+* nei.notify.<feature> - Get notified when someone uses a nei feature
+** nei.notify.clear - Get notified when someone clears his inventory with NEI (delete all button).
+** nei.notify.gamemode - Get notified when someone changes his gamemode with NEI.
+** nei.notify.magnet - Get notified when someone enables/disables magnet mode.
+** nei.notify.heal - Get notified when someone heals himself with NEI.
+** nei.notify.rain - Get notified when someone changes the weather with NEI (when it isn't broadcasted globally)
+** nei.notify.time - Get notified when someone changes the time with NEI (when it isn't broadcasted globally)
+** nei.notify.save-state - Get notified when someone uses a save-state and see which items he spawns. (spam warning)
+** nei.notify.enchant - Get notified when someone (dis)enchants an item with NEI.
