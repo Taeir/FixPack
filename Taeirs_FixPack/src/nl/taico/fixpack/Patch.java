@@ -43,11 +43,14 @@ public class Patch {
 	static {
 		versions.put("cc", "2");
 		versions.put("ic2", "1");
-		versions.put("nei", "6");
-		versions.put("wr", "3");
-		versions.put("mffs", "1");
-		versions.put("weaponsmod", "7");
+		versions.put("nei", "8");
+		versions.put("wr", "4");
+		versions.put("mffs", "4");
+		versions.put("weaponsmod", "9");
 		versions.put("tubestuff", "0");
+		versions.put("railcraft", "2");
+		versions.put("redpower", "2");
+		versions.put("eepatch", "1_7_2");
 	}
 	
 	void startPatch(String location){
@@ -154,6 +157,42 @@ public class Patch {
 		log("");
 		
 		log("----------------------------------------------------------------------------------------");
+		log("                                  Patching RailCraft...                                 ");
+		log("----------------------------------------------------------------------------------------");
+		outcome = RailCraft();
+		if (outcome==0){
+			log("");
+			log("Patching RailCraft Failed!", red);
+			failed += "RailCraft, ";
+		} else if (outcome==1){
+			log("");
+			log("RailCraft was patched Successfully!", green);
+			patched += "RailCraft, ";
+		} else {
+			skipped += "RailCraft, ";
+		}
+		try {Thread.sleep(1000);} catch (InterruptedException e) {}
+		log("");
+		
+		log("----------------------------------------------------------------------------------------");
+		log("                                  Patching RedPower...                                  ");
+		log("----------------------------------------------------------------------------------------");
+		outcome = RedPower();
+		if (outcome==0){
+			log("");
+			log("Patching RedPower Failed!", red);
+			failed += "RedPower, ";
+		} else if (outcome==1){
+			log("");
+			log("RedPower was patched Successfully!", green);
+			patched += "RedPower, ";
+		} else {
+			skipped += "RedPower, ";
+		}
+		try {Thread.sleep(1000);} catch (InterruptedException e) {}
+		log("");
+		
+		log("----------------------------------------------------------------------------------------");
 		log("                                  Patching TubeStuff...                                 ");
 		log("----------------------------------------------------------------------------------------");
 		outcome = TubeStuff();
@@ -185,6 +224,24 @@ public class Patch {
 			patched += "WirelessRedstone, ";
 		} else {
 			skipped += "WirelessRedstone, ";
+		}
+		try {Thread.sleep(1000);} catch (InterruptedException e) {}
+		log("");
+		
+		log("----------------------------------------------------------------------------------------");
+		log("                                  Installing EEPatch...                                 ");
+		log("----------------------------------------------------------------------------------------");
+		outcome = EEPatch();
+		if (outcome==0){
+			log("");
+			log("Installing EEPatch Failed!", red);
+			failed += "EEPatch, ";
+		} else if (outcome==1){
+			log("");
+			log("EEPatch was installed Successfully!", green);
+			patched += "EEPatch, ";
+		} else {
+			skipped += "EEPatch, ";
 		}
 		try {Thread.sleep(1000);} catch (InterruptedException e) {}
 		log("");
@@ -564,6 +621,126 @@ public class Patch {
 			output.close();
 		} catch (IOException e) {
 			logr("Error: Unable to write patched file!");
+			return 0;
+		}
+		
+		try {
+			patched.createNewFile();
+		} catch (IOException e) {
+			logr("Error: Unable to write patched file!");
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	byte RailCraft(){
+		File patched = new File(loc+"Railcraft-5.3.3-MCPC-1.2.5-r8_patched"+versions.get("railcraft"));
+		if (patched.exists()){
+			log("RailCraft was already patched. Skipping RailCraft Patch...", orange);
+			return 2;
+		}
+		File wmFile = new File(loc+"temp"+s+"Railcraft_Patch.zip");
+		if (wmFile.exists()) wmFile.delete();
+
+		InputStream jarURL = Patch.class.getResourceAsStream("/Patches/Railcraft.zip");
+		try {
+			copyFile(jarURL, wmFile);
+		} catch (Exception ex) {
+			logr(ex);
+		}
+		
+		try {
+			jarURL.close();
+		} catch (IOException e) {
+			logr("Error: Cannot close file /Patches/Railcraft.zip!");
+			return 0;
+		}
+		
+		try {
+			zipAppender.patchZip(loc+"Railcraft-5.3.3-MCPC-1.2.5-r8.zip", loc+"temp"+s+"Railcraft_Patch.zip");
+		} catch (Exception e) {
+			logr("Error: Cannot Patch Railcraft-5.3.3-MCPC-1.2.5-r8.zip");
+			return 0;
+		}
+		
+		try {
+			patched.createNewFile();
+		} catch (IOException e) {
+			logr("Error: Unable to write patched file!");
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	byte RedPower(){
+		File patched = new File(loc+"redpower-all-2.0p5b2-mcpc1.2.5-r15_patched"+versions.get("redpower"));
+		if (patched.exists()){
+			log("RedPower was already patched. Skipping RedPower Patch...", orange);
+			return 2;
+		}
+		File wmFile = new File(loc+"temp"+s+"RedPower_Patch.zip");
+		if (wmFile.exists()) wmFile.delete();
+
+		InputStream jarURL = Patch.class.getResourceAsStream("/Patches/redpower.zip");
+		try {
+			copyFile(jarURL, wmFile);
+		} catch (Exception ex) {
+			logr(ex);
+		}
+		
+		try {
+			jarURL.close();
+		} catch (IOException e) {
+			logr("Error: Cannot close file /Patches/redpower.zip!");
+			return 0;
+		}
+		
+		try {
+			zipAppender.patchZip(loc+"redpower-all-2.0p5b2-mcpc1.2.5-r15.zip", loc+"temp"+s+"RedPower_Patch.zip");
+		} catch (Exception e) {
+			logr("Error: Cannot Patch redpower-all-2.0p5b2-mcpc1.2.5-r15.zip");
+			return 0;
+		}
+		
+		try {
+			patched.createNewFile();
+		} catch (IOException e) {
+			logr("Error: Unable to write patched file!");
+			return 1;
+		}
+		
+		return 1;
+	}
+	
+	byte EEPatch(){
+		File patched = new File(loc+"eepatch"+versions.get("eepatch"));
+		if (patched.exists()){
+			log("EEPatch was already installed. Skipping EEPatch...", orange);
+			return 2;
+		}
+		File wmFile = new File(loc+"temp"+s+"EEPatch_Patch.zip");
+		if (wmFile.exists()) wmFile.delete();
+
+		InputStream jarURL = Patch.class.getResourceAsStream("/Patches/EEPatch.zip");
+		try {
+			copyFile(jarURL, wmFile);
+		} catch (Exception ex) {
+			logr(ex);
+		}
+		
+		try {
+			jarURL.close();
+		} catch (IOException e) {
+			logr("Error: Cannot close file /Patches/EEPatch.zip!");
+			return 0;
+		}
+		
+		try {
+			zipAppender.patchZip(loc+"EE2ServerV1.4.6.5-bukkit-mcpc-1.2.5-r5.zip", loc+"temp"+s+"EEPatch.zip");
+		} catch (Exception e) {
+			logr("Error: Cannot Patch EE2ServerV1.4.6.5-bukkit-mcpc-1.2.5-r5.zip");
 			return 0;
 		}
 		
